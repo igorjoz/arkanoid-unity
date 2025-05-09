@@ -1,38 +1,37 @@
-using UnityEditor;
 using UnityEngine;
 
 public class ArcanoidBall : MonoBehaviour
 {
+    //Pr�dko�� pi�ki
     public float speed = 5f;
-    Rigidbody rb;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        RunBall();
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //Funkcja nadaj�ca pr�dko��
     public void RunBall()
     {
+        //Losowanie kierunku
         float x = Random.Range(0, 2) == 0 ? -1 : 1;
-        rb.velocity = new Vector3(x * speed, speed, 0f);
-        //rb.linearVelocity = new Vector3(x * speed, speed, 0f);
+        GetComponent<Rigidbody>().linearVelocity = new Vector3(x * speed, speed, 0f);
     }
+
+    //Zatrzymanie ruchu
     public void StopBall()
     {
-        rb.velocity = new Vector3(0, 0, 0);
+        GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, 0);
     }
+
+    private void Start()
+    {
+        //Uruchomienie na start, potem usuniemy
+        //RunBall();
+    }
+
+    //Sprawdzenie czy kolidujemy z miejscem zniszczenia
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "LoseWall")
+        if (collision.gameObject.name == "Lose")
         {
-            // GameManager.instance.EndGame(false);
-            Debug.Log("Przegrana!");
+            GameManager.instance.EndGame(false);
+            Debug.Log("Koniec Gry");
             this.gameObject.GetComponent<Renderer>().enabled = false;
         }
     }

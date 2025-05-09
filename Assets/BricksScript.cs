@@ -1,31 +1,27 @@
-using UnityEditor.Rendering.Analytics;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BricksScript : MonoBehaviour
 {
-    public int life = 1;
+    //Zmienna prywatna, któr¹ mo¿na zmieniaæ w inspektorze
+    //Iloœæ ¿ycia naszej cegie³ki
+    [SerializeField]
+    int life = 1;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Za ka¿dym razem jak ona siê zetknie z czymœ
     private void OnCollisionEnter(Collision collision)
     {
+        //Je¿eli ma to tag Ball
         if (collision.gameObject.tag == "Ball")
         {
+            //usuawamy jedno ¿ycie
             life--;
-
+            //Je¿eli ¿ycia s¹ równe lub mniejsze od 0
             if (life <= 0)
             {
-                Destroy(gameObject);
+                GameManager.instance.bricks.Remove(this.gameObject);
+                Destroy(gameObject); //Zniszcz obiekt
             }
         }
     }

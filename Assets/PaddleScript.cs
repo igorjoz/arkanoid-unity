@@ -1,21 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PaddleScript : MonoBehaviour
 {
+    //Prêdkoœæ naszej paletki
     public float speed = 5f;
 
-    // Update is called once per frame
     void Update()
     {
         Move();
     }
 
+    //funkcja odpowiedzialna za ruch
     void Move()
     {
-        float xMovement = Input.GetAxis("Horizontal");
+        //Pobranie informacji z strza³ek prawo-lewo lub klawiszy a-d w któr¹ stronê siê poruszamy
+        //GetAxisRaw zwraca tylko wartoœci -1, 0 i 1, dziêki temu prêdkoœæ zawsze bêdzie sta³a
+        float x = Input.GetAxisRaw("Horizontal");
 
-        float xSpeed = xMovement * speed * Time.deltaTime;
+        //Przeliczamy prêdkoœæ, kierunek i ró¿nicê czasu pomiêdzy klatkami
+        float speddDir = x * speed * Time.deltaTime;
 
-        transform.position += new Vector3(xSpeed, 0, 0);
+        //zmieniamy pozycjê naszej paletki
+        transform.position += new Vector3(speddDir, 0, 0);
+
     }
 }
