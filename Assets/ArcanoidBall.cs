@@ -1,38 +1,42 @@
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class ArcanoidBall : MonoBehaviour
 {
-    //Pr�dko�� pi�ki
-    public float speed = 5f;
+    [SerializeField] private float speed = 6f;
 
-    //Funkcja nadaj�ca pr�dko��
+    private Rigidbody rb;
+
+    private void Awake() => rb = GetComponent<Rigidbody>();
+
     public void RunBall()
     {
-        //Losowanie kierunku
-        float x = Random.Range(0, 2) == 0 ? -1 : 1;
-        GetComponent<Rigidbody>().linearVelocity = new Vector3(x * speed, speed, 0f);
+        float xDir = Random.value < 0.5f ? -1f : 1f;
+        Vector3 dir = new Vector3(xDir, 1f, 0f).normalized;
+        rb.velocity = dir * speed;
+        Debug.Log($"RunBall → rb.velocity = {rb.velocity}");
     }
 
-    //Zatrzymanie ruchu
     public void StopBall()
     {
-        GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, 0);
+        //rb.velocity = Vector3.zero;
+        //transform.position = new Vector3(0f, -3f, 0f);
     }
 
-    private void Start()
+    private void OnCollisionEnter(Collision col)
     {
-        //Uruchomienie na start, potem usuniemy
-        //RunBall();
-    }
-
-    //Sprawdzenie czy kolidujemy z miejscem zniszczenia
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Lose")
+        if (col.gameObject.name == "Lose")
         {
-            GameManager.instance.EndGame(false);
-            Debug.Log("Koniec Gry");
-            this.gameObject.GetComponent<Renderer>().enabled = false;
+            GameManager.instance.lives--;
+            GameManager.instance.UpdateUI();
+            StopBall();
+            GameManager.instance.gameRun = false;
+
+            if (GameManager.instance.lives < 0)
+            {
+                GameManager.instance.EndGame(false);
+                GetComponent<Renderer>().enabled = false;
+            }
         }
     }
 }
