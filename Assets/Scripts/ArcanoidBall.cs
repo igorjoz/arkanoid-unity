@@ -10,7 +10,7 @@ public class ArcanoidBall : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        RunBall();
+        //RunBall();
     }
     // Update is called once per frame
     void Update()
@@ -20,20 +20,28 @@ public class ArcanoidBall : MonoBehaviour
     public void RunBall()
     {
         float x = Random.Range(0, 2) == 0 ? -1 : 1;
-        rb.velocity = new Vector3(x * speed, speed, 0f);
+        rb.linearVelocity = new Vector3(x * speed, speed, 0f);
         //rb.linearVelocity = new Vector3(x * speed, speed, 0f);
     }
     public void StopBall()
     {
-        rb.velocity = new Vector3(0, 0, 0);
+        rb.linearVelocity = new Vector3(0, 0, 0);
+        transform.position = new Vector3(0, -1, 0);
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "LoseWall")
         {
-            // GameManager.instance.EndGame(false);
-            Debug.Log("Przegrana!");
-            this.gameObject.GetComponent<Renderer>().enabled = false;
+            GameManager.instance.lives--;
+            StopBall();
+            GameManager.instance.isGameRunning = false;
+
+            if (GameManager.instance.lives <= 0)
+            {
+                GameManager.instance.EndGame(false);
+                Debug.Log("Przegrana!");
+                gameObject.GetComponent<Renderer>().enabled = false;
+            }
         }
     }
 }
