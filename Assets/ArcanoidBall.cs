@@ -13,8 +13,8 @@ public class ArcanoidBall : MonoBehaviour
     {
         float xDir = Random.value < 0.5f ? -1f : 1f;
         Vector3 dir = new Vector3(xDir, 1f, 0f).normalized;
-        rb.velocity = dir * speed;
-        Debug.Log($"RunBall → rb.velocity = {rb.velocity}");
+        rb.linearVelocity = dir * speed;
+        Debug.Log($"RunBall → rb.velocity = {rb.linearVelocity}");
     }
 
     public void StopBall()
