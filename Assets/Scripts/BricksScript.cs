@@ -36,6 +36,8 @@ public class BricksScript : MonoBehaviour
                 GameManager.instance.bricks.Remove(this.gameObject);
                 Destroy(gameObject);
             }
+
+            SetBrickColor();
         }
     }
 }
