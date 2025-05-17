@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public bool isGameRunning = false;
     public int lives;
 
-    void Start()
+    void Awake()
     {
         if (instance == null)
         {
